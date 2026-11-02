@@ -911,6 +911,19 @@
       state.autoMode = !state.autoMode;
       document.getElementById('sw-auto').classList.toggle('on', state.autoMode);
       document.getElementById('auto-label').textContent = state.autoMode ? 'Đang bật' : 'Thủ công';
+
+      // Khi bật lại Tự động: đánh giá ngay thời tiết hiện tại để đóng/mở sào tương ứng
+      if (state.autoMode) {
+        const now = new Date().toLocaleTimeString('vi-VN');
+        if ((state.rain >= 30 || state.hum >= 82) && state.rackState === 1) {
+          state.rackState = 0;
+          document.getElementById('ret-time').textContent = now;
+        } else if (state.rain < 15 && state.hum < 82 && state.rackState === 0) {
+          state.rackState = 1;
+          document.getElementById('ext-time').textContent = now;
+        }
+        render();
+      }
     }
 
     function toggleSimMode() {
@@ -925,27 +938,54 @@
     function simulateWeather(type) {
       const wb = document.getElementById('weather-badge');
       const banner = document.getElementById('rain-banner');
+      const bannerText = document.getElementById('rain-banner-text');
       const now = new Date().toLocaleTimeString('vi-VN');
+
       if (type === 'SUNNY') {
-        Object.assign(state, { temp: 33.5, hum: 58, rain: 0, rssi: -54, rackState: 1, dryingSeconds: 7520, fan: false, light: false });
-        document.getElementById('ext-time').textContent = now;
+        Object.assign(state, { temp: 33.5, hum: 58, rain: 0, rssi: -54, weather: 'SUNNY' });
         wb.textContent = '☀️ Nắng ráo';
         wb.className = 'badge badge-warn';
         banner.style.display = 'none';
+
+        // Chỉ tự động đẩy sào ra nếu đang ở Chế độ Tự động
+        if (state.autoMode && state.rackState !== 1) {
+          state.rackState = 1;
+          document.getElementById('ext-time').textContent = now;
+        }
       } else if (type === 'SHOWER') {
-        Object.assign(state, { temp: 29.5, hum: 76, rain: 38, rssi: -61, rackState: 0, dryingSeconds: 1500, fan: false });
-        document.getElementById('ret-time').textContent = now;
+        Object.assign(state, { temp: 29.5, hum: 76, rain: 38, rssi: -61, weather: 'SHOWER' });
         wb.textContent = '🌦️ Mưa nhỏ';
         wb.className = 'badge badge-info';
         banner.style.display = 'block';
-        document.getElementById('rain-banner-text').textContent = '🌦️ Phát hiện mưa bóng mây! Đã tự động thu sào vào mái hiên.';
+
+        if (state.autoMode) {
+          if (state.rackState !== 0) {
+            state.rackState = 0;
+            document.getElementById('ret-time').textContent = now;
+          }
+          bannerText.textContent = '🌦️ Phát hiện mưa bóng mây! Đã tự động thu sào vào mái hiên.';
+        } else {
+          bannerText.textContent = state.rackState === 1
+            ? '⚠️ Trời đang mưa nhỏ! Hệ thống đang ở Chế độ Thủ công (Sào vẫn đang mở ngoài trời).'
+            : '🌦️ Trời đang mưa nhỏ · Sào đang giữ nguyên trong mái hiên (Chế độ Thủ công).';
+        }
       } else if (type === 'HEAVY_RAIN') {
-        Object.assign(state, { temp: 26.0, hum: 90, rain: 82, rssi: -65, rackState: 0, dryingSeconds: 1500, fan: true, light: true });
-        document.getElementById('ret-time').textContent = now;
+        Object.assign(state, { temp: 26.0, hum: 90, rain: 82, rssi: -65, weather: 'HEAVY_RAIN' });
         wb.textContent = '⛈️ Mưa lớn';
         wb.className = 'badge badge-danger';
         banner.style.display = 'block';
-        document.getElementById('rain-banner-text').textContent = '⛈️ Cảnh báo mưa rào lớn! Đã thu sào khẩn cấp & bật quạt sấy.';
+
+        if (state.autoMode) {
+          if (state.rackState !== 0) {
+            state.rackState = 0;
+            document.getElementById('ret-time').textContent = now;
+          }
+          bannerText.textContent = '⛈️ Cảnh báo mưa rào lớn! Đã tự động thu sào khẩn cấp về mái hiên.';
+        } else {
+          bannerText.textContent = state.rackState === 1
+            ? '🚨 CẢNH BÁO MƯA LỚN! Đang ở Chế độ Thủ công nên sào chưa thu vào — hãy bấm Thu sào ngay!'
+            : '⛈️ Trời mưa rào lớn · Sào đang giữ nguyên trong mái hiên (Chế độ Thủ công).';
+        }
       }
       render();
     }
