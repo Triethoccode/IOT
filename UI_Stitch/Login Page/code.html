@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng nhập — AeroDry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-page: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-well: #f8fafc;
+      --bg-input: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --accent: #0284c7;
+      --accent-hover: #0369a1;
+      --accent-soft: rgba(2, 132, 199, 0.1);
+      --shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+    }
+    html.dark {
+      --bg-page: #090d16;
+      --bg-card: #111827;
+      --bg-well: #1e293b;
+      --bg-input: #1e293b;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #1f2937;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      user-select: none;
+    }
+    .top-bar {
+      max-width: 1120px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .theme-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .theme-btn:hover {
+      border-color: var(--accent);
+    }
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+      margin: auto;
+    }
+    .brand-box {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .logo-badge {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.4);
+      margin-bottom: 14px;
+    }
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .brand-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-icon {
+      position: absolute;
+      left: 13px;
+      color: var(--text-muted);
+      font-size: 19px;
+      pointer-events: none;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 14px 12px 42px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus {
+      border-color: var(--accent);
+    }
+    .eye-btn {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+    }
+    .remember-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #0284c7, #0ea5e9);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.3);
+      transition: filter 0.2s, transform 0.1s;
+    }
+    .submit-btn:hover {
+      filter: brightness(1.06);
+    }
+    .submit-btn:active {
+      transform: scale(0.99);
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <button type="button" class="theme-btn" onclick="toggleTheme()">
+      <span id="theme-icon" class="material-symbols-outlined" style="font-size: 18px; color: #f59e0b;">light_mode</span>
+      <span id="theme-label">Sáng</span>
+    </button>
+  </div>
+
+  <main class="login-container">
+    <div class="brand-box">
+      <div class="logo-badge">
+        <span class="material-symbols-outlined" style="font-size: 30px;">wb_sunny</span>
+      </div>
+      <h1 class="brand-title">AeroDry</h1>
+      <p class="brand-sub">Hệ thống Giàn phơi Thông minh</p>
+    </div>
+
+    <div class="card">
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <div class="input-wrap">
+            <span class="material-symbols-outlined input-icon">mail</span>
+            <input id="email" type="email" class="form-input" required value="admin@aerodry.vn" placeholder="nhap.email@gmail.com" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <label for="password">Mật khẩu</label>
+            <a href="#" onclick="alert('Đã gửi yêu cầu đặt lại mật khẩu về email.'); return false;" style="color: var(--accent); text-decoration: none; font-size: 12px;">Quên mật khẩu?</a>
+          </div>
+          <div class="input-wrap">
+            <span class="material-symbols-outlined input-icon">lock</span>
+            <input id="password" type="password" class="form-input" style="padding-right: 40px; font-family: 'JetBrains Mono', monospace;" required value="AeroDry@2026" />
+            <button type="button" class="eye-btn" onclick="togglePw()">
+              <span id="pw-icon" class="material-symbols-outlined" style="font-size: 19px;">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="remember-row">
+          <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" checked style="width: 15px; height: 15px; accent-color: #0284c7;" />
+            <span>Ghi nhớ đăng nhập</span>
+          </label>
+          <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #10b981; font-weight: 600;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981;"></span>
+            Trực tuyến
+          </span>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <span>Đăng nhập</span>
+          <span class="material-symbols-outlined" style="font-size: 19px;">arrow_forward</span>
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">© 2026 AeroDry SmartBreeze</footer>
+
+  <script>
+    function applyTheme() {
+      const isDark = localStorage.getItem('aerodry_theme') === 'dark';
+      document.documentElement.classList.toggle('dark', isDark);
+      const icon = document.getElementById('theme-icon');
+      const label = document.getElementById('theme-label');
+      icon.textContent = isDark ? 'dark_mode' : 'light_mode';
+      icon.style.color = isDark ? '#38bdf8' : '#f59e0b';
+      label.textContent = isDark ? 'Tối' : 'Sáng';
+    }
+    function toggleTheme() {
+      const isDark = localStorage.getItem('aerodry_theme') === 'dark';
+      localStorage.setItem('aerodry_theme', isDark ? 'light' : 'dark');
+      applyTheme();
+    }
+    function togglePw() {
+      const inp = document.getElementById('password');
+      const ic = document.getElementById('pw-icon');
+      const show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      ic.textContent = show ? 'visibility_off' : 'visibility';
+    }
+    function handleLogin(e) {
+      e.preventDefault();
+      localStorage.setItem('aerodry_user', document.getElementById('email').value);
+      window.location.href = '../GiaoDienChinh/code.html';
+    }
+    applyTheme();
+  </script>
+</body>
+</html>

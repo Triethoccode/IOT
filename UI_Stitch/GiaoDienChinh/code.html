@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bảng điều khiển — AeroDry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-page: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-well: #f8fafc;
+      --bg-header: rgba(255, 255, 255, 0.88);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --border-well: #e2e8f0;
+      --track: #cbd5e1;
+      --accent: #0284c7;
+      --accent-soft: rgba(2, 132, 199, 0.12);
+      --accent-area: rgba(2, 132, 199, 0.10);
+      --bar-muted: rgba(2, 132, 199, 0.55);
+      --shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
+    }
+    html.dark {
+      --bg-page: #090d16;
+      --bg-card: #111827;
+      --bg-well: #1a2333;
+      --bg-header: rgba(17, 24, 39, 0.88);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #1f2937;
+      --border-well: #263348;
+      --track: #334155;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.14);
+      --accent-area: rgba(56, 189, 248, 0.12);
+      --bar-muted: rgba(56, 189, 248, 0.55);
+      --shadow: 0 10px 30px -6px rgba(0, 0, 0, 0.45);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page) !important;
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      user-select: none;
+      vertical-align: middle;
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background-color: var(--bg-header);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+    .brand-name {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background-color: var(--bg-well);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.1s;
+    }
+    .btn-chip:hover {
+      border-color: var(--accent);
+    }
+    .btn-chip:active {
+      transform: scale(0.98);
+    }
+
+    /* Main Grid */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px 24px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    @media (max-width: 1024px) {
+      .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .header-inner { padding: 0 16px; height: 60px; }
+      .container { padding: 16px 16px 32px; gap: 16px; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .hide-sm { display: none !important; }
+    }
+
+    /* Card & Wells */
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .card-title-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background-color: var(--accent-soft);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .well {
+      background-color: var(--bg-well);
+      border: 1px solid var(--border-well);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-ok { background-color: rgba(16, 185, 129, 0.14); color: #10b981; }
+    .badge-info { background-color: var(--accent-soft); color: var(--accent); }
+    .badge-warn { background-color: rgba(245, 158, 11, 0.16); color: #f59e0b; }
+    .badge-danger { background-color: rgba(239, 68, 68, 0.16); color: #ef4444; }
+
+    /* Info Row */
+    .info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border-radius: 12px;
+      background-color: var(--bg-well);
+      border: 1px solid var(--border-well);
+      font-size: 13px;
+    }
+    .info-label {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    /* Switch Row */
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background-color: var(--bg-well);
+      border: 1px solid var(--border-well);
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.2s;
+    }
+    .switch-row:hover {
+      border-color: var(--accent);
+    }
+    .switch-track {
+      width: 44px;
+      height: 24px;
+      border-radius: 999px;
+      background-color: var(--track);
+      position: relative;
+      transition: background-color 0.25s ease;
+      flex-shrink: 0;
+    }
+    .switch-track.on {
+      background-color: #0284c7;
+    }
+    .switch-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.25s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    }
+    .switch-track.on .switch-thumb {
+      transform: translateX(20px);
+    }
+
+    /* Action Buttons */
+    .btn-action-primary {
+      width: 100%;
+      padding: 15px 16px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #0284c7, #0ea5e9);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25);
+      transition: filter 0.2s, transform 0.1s;
+    }
+    .btn-action-primary:hover { filter: brightness(1.06); }
+    .btn-action-primary:active { transform: scale(0.99); }
+
+    .btn-action-secondary {
+      width: 100%;
+      padding: 15px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-well);
+      background-color: var(--bg-well);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.2s, transform 0.1s;
+    }
+    .btn-action-secondary:hover { border-color: var(--accent); }
+    .btn-action-secondary:active { transform: scale(0.99); }
+
+    /* Scenario Grid */
+    .sim-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .sim-btn {
+      padding: 10px 8px;
+      border-radius: 11px;
+      border: 1px solid var(--border-well);
+      background-color: var(--bg-well);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .sim-btn:hover {
+      border-color: var(--accent);
+      background-color: var(--accent-soft);
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spin { animation: spin 2.2s linear infinite; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">
+          <span class="material-symbols-outlined" style="font-size: 22px;">wb_sunny</span>
+        </div>
+        <span class="brand-name">AeroDry</span>
+        <span class="badge badge-ok hide-sm">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981;"></span>
+          Trực tuyến
+        </span>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="btn-chip" onclick="toggleTheme()">
+          <span id="theme-icon" class="material-symbols-outlined" style="font-size: 18px; color: #f59e0b;">light_mode</span>
+          <span id="theme-label">Sáng</span>
+        </button>
+
+        <span id="user-badge" class="btn-chip hide-sm" style="cursor: default;">
+          <span class="material-symbols-outlined" style="font-size: 17px; color: var(--accent);">person</span>
+          <span id="user-name">admin@aerodry.vn</span>
+        </span>
+
+        <a href="../Login Page/code.html" class="btn-chip" style="color: #ef4444;">
+          <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
+          <span class="hide-sm">Đăng xuất</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Alert Banner -->
+    <div id="rain-banner" style="display: none; background-color: #ef4444; color: #ffffff; padding: 9px 24px; font-size: 13px; font-weight: 600;">
+      <div style="max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+        <span id="rain-banner-text" style="color: #ffffff;">⛈️ Phát hiện trời mưa! Đã tự động thu sào vào mái hiên.</span>
+        <button type="button" onclick="document.getElementById('rain-banner').style.display='none'" style="background: rgba(255,255,255,0.2); border: none; color: #fff; padding: 3px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">Đóng</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="container">
+
+    <!-- 3 COLUMNS -->
+    <div class="grid-3">
+
+      <!-- ================================================================ -->
+      <!-- COLUMN 1: THIẾT BỊ & CHẾ ĐỘ                                      -->
+      <!-- ================================================================ -->
+      <section class="card">
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="card-head">
+            <div class="card-title">
+              <div class="card-title-icon">
+                <span class="material-symbols-outlined" style="font-size: 19px;">router</span>
+              </div>
+              <span>Thiết bị &amp; Chế độ</span>
+            </div>
+            <span class="badge badge-ok">Ổn định</span>
+          </div>
+
+          <!-- WiFi Gauge -->
+          <div class="well" style="text-align: center;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">
+              <span>Tín hiệu WiFi</span>
+              <span id="rssi-status" style="color: #10b981; font-weight: 600;">Rất tốt</span>
+            </div>
+            <div style="position: relative; width: 168px; height: 92px; margin: 4px auto; display: flex; align-items: flex-end; justify-content: center;">
+              <svg viewBox="0 0 200 110" style="width: 168px; height: 92px; overflow: visible;">
+                <!-- Track -->
+                <path d="M 20 98 A 80 80 0 0 1 180 98" style="fill: none !important; stroke: var(--track) !important; stroke-width: 14px; stroke-linecap: round;" />
+                <!-- Active Value Arc -->
+                <path id="rssi-arc" d="M 20 98 A 80 80 0 0 1 180 98" stroke-dasharray="251.3" stroke-dashoffset="85" style="fill: none !important; stroke: var(--accent) !important; stroke-width: 14px; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease;" />
+              </svg>
+              <div style="position: absolute; bottom: 2px;">
+                <span id="rssi-val" class="mono" style="font-size: 24px; font-weight: 700;">-56</span>
+                <span style="font-size: 12px; color: var(--text-secondary);"> dBm</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Network Info -->
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="info-row">
+              <span class="info-label">
+                <span class="material-symbols-outlined" style="font-size: 18px;">lan</span>
+                Địa chỉ IP
+              </span>
+              <span id="ip-val" class="mono" style="font-weight: 600;">192.168.1.108</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">
+                <span class="material-symbols-outlined" style="font-size: 18px;">cloud_done</span>
+                Trạng thái
+              </span>
+              <span class="badge badge-ok">Đang kết nối</span>
+            </div>
+          </div>
+
+          <!-- Switches -->
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="switch-row" onclick="toggleAutoMode()">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="material-symbols-outlined" style="font-size: 20px; color: var(--accent);">hdr_auto</span>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 600;">Tự động theo thời tiết</div>
+                  <div id="auto-label" style="font-size: 11.5px; color: var(--text-secondary);">Đang bật</div>
+                </div>
+              </div>
+              <div id="sw-auto" class="switch-track on"><div class="switch-thumb"></div></div>
+            </div>
+
+            <div class="switch-row" onclick="toggleSimMode()">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="material-symbols-outlined" style="font-size: 20px; color: var(--accent);">science</span>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 600;">Thử nghiệm thời tiết</div>
+                  <div id="sim-label" style="font-size: 11.5px; color: var(--text-secondary);">Đang bật</div>
+                </div>
+              </div>
+              <div id="sw-sim" class="switch-track on"><div class="switch-thumb"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compact Weather Test Buttons -->
+        <div id="sim-panel" class="sim-grid">
+          <button type="button" class="sim-btn" onclick="simulateWeather('SUNNY')">
+            <span class="material-symbols-outlined" style="color: #f59e0b; font-size: 20px;">wb_sunny</span>
+            <span>Nắng ráo</span>
+          </button>
+          <button type="button" class="sim-btn" onclick="simulateWeather('SHOWER')">
+            <span class="material-symbols-outlined" style="color: #0ea5e9; font-size: 20px;">rainy</span>
+            <span>Mưa nhỏ</span>
+          </button>
+          <button type="button" class="sim-btn" onclick="simulateWeather('HEAVY_RAIN')">
+            <span class="material-symbols-outlined" style="color: #ef4444; font-size: 20px;">thunderstorm</span>
+            <span>Mưa lớn</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- COLUMN 2: MÔI TRƯỜNG & GIỜ PHƠI                                  -->
+      <!-- ================================================================ -->
+      <section class="card">
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="card-head">
+            <div class="card-title">
+              <div class="card-title-icon">
+                <span class="material-symbols-outlined" style="font-size: 19px;">thermostat</span>
+              </div>
+              <span>Môi trường &amp; Giờ phơi</span>
+            </div>
+            <span id="weather-badge" class="badge badge-warn">☀️ Nắng ráo</span>
+          </div>
+
+          <!-- Dual Gauges (Temp & Hum) -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="well" style="text-align: center; padding: 12px 10px;">
+              <div style="font-size: 12px; color: var(--text-secondary); font-weight: 500;">Nhiệt độ</div>
+              <div style="position: relative; width: 118px; height: 68px; margin: 6px auto 2px; display: flex; align-items: flex-end; justify-content: center;">
+                <svg viewBox="0 0 160 90" style="width: 118px; height: 68px; overflow: visible;">
+                  <path d="M 20 80 A 60 60 0 0 1 140 80" style="fill: none !important; stroke: var(--track) !important; stroke-width: 13px; stroke-linecap: round;" />
+                  <path id="temp-arc" d="M 20 80 A 60 60 0 0 1 140 80" stroke-dasharray="188.5" stroke-dashoffset="66" style="fill: none !important; stroke: var(--accent) !important; stroke-width: 13px; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease;" />
+                </svg>
+                <span id="temp-val" class="mono" style="position: absolute; bottom: 0; font-size: 17px; font-weight: 700;">32.5°C</span>
+              </div>
+            </div>
+
+            <div class="well" style="text-align: center; padding: 12px 10px;">
+              <div style="font-size: 12px; color: var(--text-secondary); font-weight: 500;">Độ ẩm</div>
+              <div style="position: relative; width: 118px; height: 68px; margin: 6px auto 2px; display: flex; align-items: flex-end; justify-content: center;">
+                <svg viewBox="0 0 160 90" style="width: 118px; height: 68px; overflow: visible;">
+                  <path d="M 20 80 A 60 60 0 0 1 140 80" style="fill: none !important; stroke: var(--track) !important; stroke-width: 13px; stroke-linecap: round;" />
+                  <path id="hum-arc" d="M 20 80 A 60 60 0 0 1 140 80" stroke-dasharray="188.5" stroke-dashoffset="71.6" style="fill: none !important; stroke: var(--accent) !important; stroke-width: 13px; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease;" />
+                </svg>
+                <span id="hum-val" class="mono" style="position: absolute; bottom: 0; font-size: 17px; font-weight: 700;">62%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rain Progress Bar -->
+          <div class="well" style="padding: 12px 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px;">
+              <span style="color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                <span class="material-symbols-outlined" style="font-size: 17px; color: var(--accent);">water_drop</span>
+                Độ ướt mưa
+              </span>
+              <span id="rain-val" class="mono" style="font-weight: 700; color: var(--accent);">5% · Khô ráo</span>
+            </div>
+            <div style="width: 100%; height: 9px; background-color: var(--track); border-radius: 999px; overflow: hidden;">
+              <div id="rain-bar" style="width: 5%; height: 100%; background-color: var(--accent); border-radius: 999px; transition: width 0.4s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Rack Position Row -->
+          <div class="info-row">
+            <span class="info-label">
+              <span class="material-symbols-outlined" style="font-size: 18px;">checkroom</span>
+              Giàn phơi
+            </span>
+            <span id="rack-badge" class="badge badge-ok">Đang mở (90°)</span>
+          </div>
+        </div>
+
+        <!-- Timer Box -->
+        <div style="background-color: #0f172a; color: #f8fafc; border-radius: 16px; padding: 16px; border: 1px solid #1e293b;">
+          <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; padding-bottom: 10px; border-bottom: 1px solid #1e293b;">
+            <span style="color: #94a3b8;">Mở: <strong id="ext-time" class="mono" style="color: #f8fafc;">08:15:00</strong></span>
+            <span style="color: #94a3b8;">Thu: <strong id="ret-time" class="mono" style="color: #f8fafc;">14:20:35</strong></span>
+          </div>
+
+          <div style="text-align: center; padding: 12px 0;">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; margin-bottom: 4px;">
+              Thời gian đã phơi
+            </div>
+            <div id="timer-clock" class="mono" style="font-size: 32px; font-weight: 700; color: #38bdf8; letter-spacing: 0.06em;">
+              02:05:20
+            </div>
+          </div>
+
+          <button type="button" onclick="controlRack('RESET_TIMER')" style="width: 100%; padding: 9px 12px; border-radius: 10px; background-color: #1e293b; color: #f8fafc; border: 1px solid #334155; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: #38bdf8;">restart_alt</span>
+            <span style="color: #f8fafc;">Đặt lại bộ đếm</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- COLUMN 3: ĐIỀU KHIỂN                                             -->
+      <!-- ================================================================ -->
+      <section class="card">
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="card-head">
+            <div class="card-title">
+              <div class="card-title-icon">
+                <span class="material-symbols-outlined" style="font-size: 19px;">tune</span>
+              </div>
+              <span>Điều khiển</span>
+            </div>
+            <span class="badge badge-info">Tức thời</span>
+          </div>
+
+          <!-- Rack Control Buttons -->
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button type="button" class="btn-action-primary" onclick="controlRack('EXTEND')">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="material-symbols-outlined" style="font-size: 22px; color: #ffffff;">wb_sunny</span>
+                <div style="text-align: left;">
+                  <div style="color: #ffffff;">Đẩy sào ra phơi</div>
+                  <div style="font-size: 11.5px; font-weight: 400; color: rgba(255,255,255,0.85);">Mở góc 90° ra ngoài trời</div>
+                </div>
+              </div>
+              <span class="material-symbols-outlined" style="color: #ffffff;">chevron_right</span>
+            </button>
+
+            <button type="button" class="btn-action-secondary" onclick="controlRack('RETRACT')">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="material-symbols-outlined" style="font-size: 22px; color: var(--accent);">roofing</span>
+                <div style="text-align: left;">
+                  <div>Thu sào vào mái hiên</div>
+                  <div style="font-size: 11.5px; font-weight: 400; color: var(--text-secondary);">Đóng góc 0° che mưa</div>
+                </div>
+              </div>
+              <span class="material-symbols-outlined" style="color: var(--text-muted);">chevron_left</span>
+            </button>
+          </div>
+
+          <!-- Fan & Light Toggles -->
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;">
+            <div class="switch-row" onclick="toggleFan()">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="fan-icon" class="material-symbols-outlined" style="font-size: 22px; color: var(--accent);">mode_fan</span>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 600;">Quạt sấy gió</div>
+                  <div id="fan-label" style="font-size: 11.5px; color: var(--text-secondary);">Đang tắt</div>
+                </div>
+              </div>
+              <div id="sw-fan" class="switch-track"><div class="switch-thumb"></div></div>
+            </div>
+
+            <div class="switch-row" onclick="toggleLight()">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="material-symbols-outlined" style="font-size: 22px; color: #f59e0b;">lightbulb</span>
+                <div>
+                  <div style="font-size: 13.5px; font-weight: 600;">Đèn ban công</div>
+                  <div id="light-label" style="font-size: 11.5px; color: var(--text-secondary);">Đang tắt</div>
+                </div>
+              </div>
+              <div id="sw-light" class="switch-track"><div class="switch-thumb"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Concise Smart Hint -->
+        <div class="well" style="border-color: var(--accent-soft); background-color: var(--accent-soft); padding: 13px 14px;">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--accent);">
+            <span class="material-symbols-outlined" style="font-size: 18px;">tips_and_updates</span>
+            <span id="advice-text">Trời nắng đẹp · Quần áo đang khô tự nhiên</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- BOTTOM SECTION: BIỂU ĐỒ 24 GIỜ (1 MÀU DUY NHẤT)                    -->
+    <!-- ================================================================== -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <div class="card-title-icon">
+            <span class="material-symbols-outlined" style="font-size: 19px;">insights</span>
+          </div>
+          <span>Thống kê 24 Giờ</span>
+        </div>
+        <button type="button" class="btn-chip" onclick="exportCSV()">
+          <span class="material-symbols-outlined" style="font-size: 17px;">download</span>
+          <span>Xuất CSV</span>
+        </button>
+      </div>
+
+      <div class="grid-2">
+        <!-- CHART 1: Nhiệt độ & Độ ẩm (Single Color, No Solid Fill Bleed) -->
+        <div class="well" style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <span style="font-size: 14px; font-weight: 700;">Nhiệt độ &amp; Độ ẩm</span>
+            <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; font-weight: 600; color: var(--accent);">
+              <span style="display: inline-flex; align-items: center; gap: 6px;">
+                <span style="width: 14px; height: 2.5px; background-color: var(--accent); display: inline-block;"></span>
+                Độ ẩm (%)
+              </span>
+              <span style="display: inline-flex; align-items: center; gap: 6px;">
+                <span style="width: 14px; height: 0; border-bottom: 2.5px dashed var(--accent); display: inline-block;"></span>
+                Nhiệt độ (°C)
+              </span>
+            </div>
+          </div>
+
+          <svg viewBox="0 0 500 210" style="width: 100%; height: 200px; overflow: visible;">
+            <!-- Grid lines -->
+            <line x1="38" y1="20" x2="485" y2="20" style="stroke: var(--border); stroke-width: 1px; stroke-dasharray: 3 3;" />
+            <line x1="38" y1="62" x2="485" y2="62" style="stroke: var(--border); stroke-width: 1px; stroke-dasharray: 3 3;" />
+            <line x1="38" y1="105" x2="485" y2="105" style="stroke: var(--border); stroke-width: 1px; stroke-dasharray: 3 3;" />
+            <line x1="38" y1="147" x2="485" y2="147" style="stroke: var(--border); stroke-width: 1px; stroke-dasharray: 3 3;" />
+            <line x1="38" y1="190" x2="485" y2="190" style="stroke: var(--track); stroke-width: 1px;" />
+
+            <!-- Y Labels -->
+            <text x="30" y="24" text-anchor="end" class="mono" style="font-size: 10px; fill: var(--text-muted);">100</text>
+            <text x="30" y="66" text-anchor="end" class="mono" style="font-size: 10px; fill: var(--text-muted);">75</text>
+            <text x="30" y="109" text-anchor="end" class="mono" style="font-size: 10px; fill: var(--text-muted);">50</text>
+            <text x="30" y="151" text-anchor="end" class="mono" style="font-size: 10px; fill: var(--text-muted);">25</text>
+            <text x="30" y="193" text-anchor="end" class="mono" style="font-size: 10px; fill: var(--text-muted);">0</text>
+
+            <!-- Soft Area under Humidity (10% opacity, never covers the line) -->
+            <path
+              d="M 60 64 C 110 72, 130 80, 160 80 C 210 80, 230 100, 260 100 C 310 100, 330 88, 360 88 C 410 88, 430 57, 460 57 L 460 190 L 60 190 Z"
+              style="fill: var(--accent-area) !important; stroke: none !important;"
+            />
+
+            <!-- Humidity Solid Line -->
+            <path
+              d="M 60 64 C 110 72, 130 80, 160 80 C 210 80, 230 100, 260 100 C 310 100, 330 88, 360 88 C 410 88, 430 57, 460 57"
+              style="fill: none !important; stroke: var(--accent) !important; stroke-width: 2.75px !important; stroke-linecap: round;"
+            />
+            <circle cx="60" cy="64" r="4" style="fill: var(--accent) !important;" />
+            <circle cx="160" cy="80" r="4" style="fill: var(--accent) !important;" />
+            <circle cx="260" cy="100" r="4" style="fill: var(--accent) !important;" />
+            <circle cx="360" cy="88" r="4" style="fill: var(--accent) !important;" />
+            <circle cx="460" cy="57" r="4" style="fill: var(--accent) !important;" />
+
+            <!-- Temperature Dashed Line (Same Single Color) -->
+            <path
+              d="M 60 142 C 110 139, 130 137, 160 137 C 210 137, 230 132, 260 132 C 310 132, 330 135, 360 135 C 410 135, 430 140, 460 140"
+              style="fill: none !important; stroke: var(--accent) !important; stroke-width: 2.25px !important; stroke-dasharray: 6 4;"
+            />
+            <circle cx="60" cy="142" r="3.5" style="fill: var(--bg-card) !important; stroke: var(--accent) !important; stroke-width: 2px;" />
+            <circle cx="160" cy="137" r="3.5" style="fill: var(--bg-card) !important; stroke: var(--accent) !important; stroke-width: 2px;" />
+            <circle cx="260" cy="132" r="3.5" style="fill: var(--bg-card) !important; stroke: var(--accent) !important; stroke-width: 2px;" />
+            <circle cx="360" cy="135" r="3.5" style="fill: var(--bg-card) !important; stroke: var(--accent) !important; stroke-width: 2px;" />
+            <circle cx="460" cy="140" r="3.5" style="fill: var(--bg-card) !important; stroke: var(--accent) !important; stroke-width: 2px;" />
+
+            <!-- X Labels -->
+            <text x="60" y="206" text-anchor="middle" class="mono" style="font-size: 11px; fill: var(--text-muted);">08:00</text>
+            <text x="160" y="206" text-anchor="middle" class="mono" style="font-size: 11px; fill: var(--text-muted);">10:00</text>
+            <text x="260" y="206" text-anchor="middle" class="mono" style="font-size: 11px; fill: var(--text-muted);">12:00</text>
+            <text x="360" y="206" text-anchor="middle" class="mono" style="font-size: 11px; fill: var(--text-muted);">14:00</text>
+            <text x="460" y="206" text-anchor="middle" class="mono" style="font-size: 11px; fill: var(--text-muted);">16:00</text>
+          </svg>
+        </div>
+
+        <!-- CHART 2: Thời lượng phơi đồ (Single Color Bars) -->
+        <div class="well" style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <span style="font-size: 14px; font-weight: 700;">Thời lượng các đợt phơi (Phút)</span>
+            <span class="badge badge-info">TB: 117 phút</span>
+          </div>
+
+          <svg viewBox="0 0 500 210" style="width: 100%; height: 200px; overflow: visible;">
+            <line x1="38" y1="20" x2="485" y2="20" style="stroke: var(--border); stroke-width: 1px; stroke-dasharray: 3 3;" />
+            <line x1="38" y1="105" x2="485" y2="105" style="stroke: var(--border); stroke-width: 1px; stroke-dasharray: 3 3;" />
+            <line x1="38" y1="190" x2="485" y2="190" style="stroke: var(--track); stroke-width: 1px;" />
+
+            <text x="30" y="24" text-anchor="end" class="mono" style="font-size: 10px; fill: var(--text-muted);">200p</text>
+            <text x="30" y="109" text-anchor="end" class="mono" style="font-size: 10px; fill: var(--text-muted);">100p</text>
+            <text x="30" y="193" text-anchor="end" class="mono" style="font-size: 10px; fill: var(--text-muted);">0p</text>
+
+            <!-- Bars (All unified single color) -->
+            <rect x="60" y="67" width="44" height="123" rx="6" style="fill: var(--bar-muted) !important;" />
+            <text x="82" y="59" text-anchor="middle" class="mono" style="font-size: 11px; font-weight: 700; fill: var(--text-primary);">145p</text>
+            <text x="82" y="206" text-anchor="middle" style="font-size: 11px; fill: var(--text-muted);">Sáng qua</text>
+
+            <rect x="150" y="109" width="44" height="81" rx="6" style="fill: var(--bar-muted) !important;" />
+            <text x="172" y="101" text-anchor="middle" class="mono" style="font-size: 11px; font-weight: 700; fill: var(--text-primary);">95p</text>
+            <text x="172" y="206" text-anchor="middle" style="font-size: 11px; fill: var(--text-muted);">Chiều qua</text>
+
+            <rect x="240" y="37" width="44" height="153" rx="6" style="fill: var(--bar-muted) !important;" />
+            <text x="262" y="29" text-anchor="middle" class="mono" style="font-size: 11px; font-weight: 700; fill: var(--text-primary);">180p</text>
+            <text x="262" y="206" text-anchor="middle" style="font-size: 11px; fill: var(--text-muted);">Đợt 1</text>
+
+            <rect x="330" y="156" width="44" height="34" rx="6" style="fill: var(--bar-muted) !important;" />
+            <text x="352" y="148" text-anchor="middle" class="mono" style="font-size: 11px; font-weight: 700; fill: var(--text-primary);">40p</text>
+            <text x="352" y="206" text-anchor="middle" style="font-size: 11px; fill: var(--text-muted);">Đợt 2</text>
+
+            <rect id="live-bar" x="420" y="84" width="44" height="106" rx="6" style="fill: var(--accent) !important;" />
+            <text id="live-bar-txt" x="442" y="76" text-anchor="middle" class="mono" style="font-size: 11px; font-weight: 700; fill: var(--accent);">125p</text>
+            <text x="442" y="206" text-anchor="middle" style="font-size: 11px; font-weight: 700; fill: var(--accent);">Hiện tại</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const state = {
+      temp: 32.5,
+      hum: 62,
+      rain: 5,
+      rssi: -56,
+      rackState: 1,
+      dryingSeconds: 7520,
+      fan: false,
+      light: false,
+      autoMode: true,
+      simMode: true,
+      weather: 'SUNNY'
+    };
+
+    function formatHMS(s) {
+      const h = String(Math.floor(s / 3600)).padStart(2, '0');
+      const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+      const sec = String(s % 60).padStart(2, '0');
+      return `${h}:${m}:${sec}`;
+    }
+
+    function applyTheme() {
+      const isDark = localStorage.getItem('aerodry_theme') === 'dark';
+      document.documentElement.classList.toggle('dark', isDark);
+      const ic = document.getElementById('theme-icon');
+      const lb = document.getElementById('theme-label');
+      ic.textContent = isDark ? 'dark_mode' : 'light_mode';
+      ic.style.color = isDark ? '#38bdf8' : '#f59e0b';
+      lb.textContent = isDark ? 'Tối' : 'Sáng';
+      const u = localStorage.getItem('aerodry_user');
+      if (u) document.getElementById('user-name').textContent = u;
+    }
+
+    function toggleTheme() {
+      const isDark = localStorage.getItem('aerodry_theme') === 'dark';
+      localStorage.setItem('aerodry_theme', isDark ? 'light' : 'dark');
+      applyTheme();
+    }
+
+    function render() {
+      const rssiPct = Math.max(0, Math.min(1, (state.rssi + 100) / 70));
+      document.getElementById('rssi-arc').setAttribute('stroke-dashoffset', (251.3 * (1 - rssiPct)).toFixed(1));
+      document.getElementById('rssi-val').textContent = state.rssi;
+
+      const tempPct = Math.max(0, Math.min(1, state.temp / 50));
+      document.getElementById('temp-arc').setAttribute('stroke-dashoffset', (188.5 * (1 - tempPct)).toFixed(1));
+      document.getElementById('temp-val').textContent = state.temp.toFixed(1) + '°C';
+
+      const humPct = Math.max(0, Math.min(1, state.hum / 100));
+      document.getElementById('hum-arc').setAttribute('stroke-dashoffset', (188.5 * (1 - humPct)).toFixed(1));
+      document.getElementById('hum-val').textContent = state.hum + '%';
+
+      document.getElementById('rain-bar').style.width = state.rain + '%';
+      const rainLabel = state.rain < 15 ? 'Khô ráo' : (state.rain < 50 ? 'Mưa nhỏ' : 'Mưa lớn');
+      document.getElementById('rain-val').textContent = `${state.rain}% · ${rainLabel}`;
+
+      const rb = document.getElementById('rack-badge');
+      if (state.rackState === 1) {
+        rb.textContent = 'Đang mở (90°)';
+        rb.className = 'badge badge-ok';
+      } else {
+        rb.textContent = 'Đã thu (0°)';
+        rb.className = 'badge badge-info';
+      }
+
+      document.getElementById('timer-clock').textContent = formatHMS(state.dryingSeconds);
+
+      const mins = Math.round(state.dryingSeconds / 60);
+      const bH = Math.max(8, Math.min(170, (mins / 200) * 170));
+      const bY = 190 - bH;
+      document.getElementById('live-bar').setAttribute('y', bY.toFixed(1));
+      document.getElementById('live-bar').setAttribute('height', bH.toFixed(1));
+      document.getElementById('live-bar-txt').setAttribute('y', (bY - 8).toFixed(1));
+      document.getElementById('live-bar-txt').textContent = mins + 'p';
+
+      document.getElementById('sw-fan').classList.toggle('on', state.fan);
+      document.getElementById('fan-icon').classList.toggle('spin', state.fan);
+      document.getElementById('fan-label').textContent = state.fan ? 'Đang bật' : 'Đang tắt';
+
+      document.getElementById('sw-light').classList.toggle('on', state.light);
+      document.getElementById('light-label').textContent = state.light ? 'Đang bật' : 'Đang tắt';
+
+      const adv = document.getElementById('advice-text');
+      if (state.rackState === 1) {
+        adv.textContent = 'Trời nắng đẹp · Quần áo đang khô tự nhiên';
+      } else if (state.hum >= 75) {
+        adv.textContent = state.fan ? 'Độ ẩm cao · Quạt sấy đang hoạt động' : 'Độ ẩm cao · Gợi ý bật quạt sấy gió';
+      } else {
+        adv.textContent = 'Sào đã thu vào mái hiên an toàn';
+      }
+    }
+
+    function controlRack(action) {
+      const now = new Date().toLocaleTimeString('vi-VN');
+      if (action === 'EXTEND') {
+        state.rackState = 1;
+        document.getElementById('ext-time').textContent = now;
+      } else if (action === 'RETRACT') {
+        state.rackState = 0;
+        document.getElementById('ret-time').textContent = now;
+      } else if (action === 'RESET_TIMER') {
+        state.dryingSeconds = 0;
+      }
+      render();
+    }
+
+    function toggleFan() { state.fan = !state.fan; render(); }
+    function toggleLight() { state.light = !state.light; render(); }
+
+    function toggleAutoMode() {
+      state.autoMode = !state.autoMode;
+      document.getElementById('sw-auto').classList.toggle('on', state.autoMode);
+      document.getElementById('auto-label').textContent = state.autoMode ? 'Đang bật' : 'Thủ công';
+    }
+
+    function toggleSimMode() {
+      state.simMode = !state.simMode;
+      document.getElementById('sw-sim').classList.toggle('on', state.simMode);
+      document.getElementById('sim-label').textContent = state.simMode ? 'Đang bật' : 'Đang tắt';
+      const p = document.getElementById('sim-panel');
+      p.style.opacity = state.simMode ? '1' : '0.4';
+      p.style.pointerEvents = state.simMode ? 'auto' : 'none';
+    }
+
+    function simulateWeather(type) {
+      const wb = document.getElementById('weather-badge');
+      const banner = document.getElementById('rain-banner');
+      const now = new Date().toLocaleTimeString('vi-VN');
+      if (type === 'SUNNY') {
+        Object.assign(state, { temp: 33.5, hum: 58, rain: 0, rssi: -54, rackState: 1, dryingSeconds: 7520, fan: false, light: false });
+        document.getElementById('ext-time').textContent = now;
+        wb.textContent = '☀️ Nắng ráo';
+        wb.className = 'badge badge-warn';
+        banner.style.display = 'none';
+      } else if (type === 'SHOWER') {
+        Object.assign(state, { temp: 29.5, hum: 76, rain: 38, rssi: -61, rackState: 0, dryingSeconds: 1500, fan: false });
+        document.getElementById('ret-time').textContent = now;
+        wb.textContent = '🌦️ Mưa nhỏ';
+        wb.className = 'badge badge-info';
+        banner.style.display = 'block';
+        document.getElementById('rain-banner-text').textContent = '🌦️ Phát hiện mưa bóng mây! Đã tự động thu sào vào mái hiên.';
+      } else if (type === 'HEAVY_RAIN') {
+        Object.assign(state, { temp: 26.0, hum: 90, rain: 82, rssi: -65, rackState: 0, dryingSeconds: 1500, fan: true, light: true });
+        document.getElementById('ret-time').textContent = now;
+        wb.textContent = '⛈️ Mưa lớn';
+        wb.className = 'badge badge-danger';
+        banner.style.display = 'block';
+        document.getElementById('rain-banner-text').textContent = '⛈️ Cảnh báo mưa rào lớn! Đã thu sào khẩn cấp & bật quạt sấy.';
+      }
+      render();
+    }
+
+    function exportCSV() {
+      const csv = 'Gio,Nhiet do (C),Do am (%),Phut phoi\n08:00,28.5,74,145\n10:00,30.2,65,95\n12:00,34.0,53,180\n14:00,32.5,62,40\n16:00,29.5,78,125';
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      a.download = 'AeroDry_24h.csv';
+      a.click();
+    }
+
+    setInterval(() => {
+      if (state.rackState === 1) {
+        state.dryingSeconds += 1;
+        document.getElementById('timer-clock').textContent = formatHMS(state.dryingSeconds);
+      }
+    }, 1000);
+
+    applyTheme();
+    render();
+  </script>
+</body>
+</html>

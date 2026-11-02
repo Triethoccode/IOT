@@ -1,0 +1,12 @@
+{
+  "name": "aerodry-iot-dashboard",
+  "version": "1.0.0",
+  "description": "AeroDry IoT (SmartBreeze Pro) - Node-RED Backend & Web Dashboard",
+  "scripts": {
+    "start": "node-red --userDir ./nodered_data flows.json"
+  },
+  "dependencies": {
+    "node-red": "^4.0.0",
+    "node-red-dashboard": "^3.6.5"
+  }
+}

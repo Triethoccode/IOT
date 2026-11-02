@@ -1,0 +1,5 @@
+node_modules/
+nodered_data/node_modules/
+nodered_data/.config.*.json
+nodered_data/.config.*.json.backup
+nodered_data/.flows.json.backup
