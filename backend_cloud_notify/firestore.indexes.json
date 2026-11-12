@@ -1,0 +1,29 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "sensor_samples",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "device_id", "order": "ASCENDING" },
+        { "fieldPath": "timestamp_ms", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "drying_sessions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "device_id", "order": "ASCENDING" },
+        { "fieldPath": "end_epoch", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "events",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "device_id", "order": "ASCENDING" },
+        { "fieldPath": "timestamp_ms", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

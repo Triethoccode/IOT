@@ -1,0 +1,14 @@
+{
+  "name": "aerodry-iot-dashboard",
+  "version": "1.0.0",
+  "description": "AeroDry IoT (SmartBreeze Pro) - Nhóm 21 - 24C11 - Full Project (ESP32, Node-RED, Firestore, PushSafer/SMTP, W06 Tests)",
+  "scripts": {
+    "start": "node-red --userDir ./nodered_data flows.json",
+    "test": "node tests/run_w06_verification.js",
+    "cloud-worker": "node backend_cloud_notify/src/index.js"
+  },
+  "dependencies": {
+    "node-red": "^4.0.0",
+    "node-red-dashboard": "^3.6.5"
+  }
+}

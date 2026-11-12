@@ -1,0 +1,68 @@
+rules_version = '2';
+
+// ============================================================================
+// QUY TẮC BẢO MẬT CLOUD FIRESTORE – AERODRY IoT (W18 - Mục 3.6 & 3.7)
+// Phụ trách: Tạ Bỉnh Phong (24127100)
+// - Chỉ người dùng đã đăng nhập hợp lệ (Firebase Authentication) mới được đọc dữ liệu.
+// - Dữ liệu cảm biến, mẻ đồ, phiên phơi và sự kiện do Backend (Admin SDK) ghi;
+//   hoặc tài khoản có quyền operator/admin trong collection users/{uid}.
+// - Tuyệt đối không lưu mật khẩu dạng rõ trong Firestore.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAuthorizedOperator() {
+      return isSignedIn() && (
+        request.auth.token.admin == true ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'operator'])
+      );
+    }
+
+    // Hồ sơ & quyền người dùng (F16 - không lưu mật khẩu dạng rõ)
+    match /users/{userId} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAuthorizedOperator());
+      allow write: if isAuthorizedOperator() && !('password' in request.resource.data);
+    }
+
+    // Thông tin & trạng thái hiện tại của thiết bị ESP32
+    match /devices/{deviceId} {
+      allow read: if isSignedIn();
+      allow write: if isAuthorizedOperator();
+    }
+
+    // Mẫu cảm biến định kỳ 60 giây (F19 - chỉ lưu dữ liệu thật, không lưu Simulation)
+    match /sensor_samples/{sampleId} {
+      allow read: if isSignedIn();
+      allow create: if isAuthorizedOperator()
+                    && request.resource.data.is_simulation == false;
+      allow update, delete: if false;
+    }
+
+    // Mẻ đồ phơi (batches)
+    match /batches/{batchId} {
+      allow read: if isSignedIn();
+      allow write: if isAuthorizedOperator()
+                    && request.resource.data.is_simulation == false;
+    }
+
+    // Các phiên phơi (drying_sessions)
+    match /drying_sessions/{sessionId} {
+      allow read: if isSignedIn();
+      allow write: if isAuthorizedOperator()
+                    && request.resource.data.is_simulation == false;
+    }
+
+    // Sự kiện đổi trạng thái và cảnh báo (events)
+    match /events/{eventId} {
+      allow read: if isSignedIn();
+      allow write: if isAuthorizedOperator()
+                    && request.resource.data.is_simulation == false;
+    }
+  }
+}

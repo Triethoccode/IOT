@@ -1,0 +1,16 @@
+{
+  "name": "aerodry-backend-cloud-notify",
+  "version": "1.0.0",
+  "description": "AeroDry IoT (Nhóm 21 - 24C11) - W18 (Firestore), W19-Phong (Truy vấn lịch sử 24h), W21 (PushSafer & Email SMTP)",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node ../tests/run_w06_verification.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "firebase-admin": "^12.5.0",
+    "mqtt": "^5.10.1",
+    "nodemailer": "^6.9.15"
+  }
+}

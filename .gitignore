@@ -1,0 +1,8 @@
+node_modules/
+backend_cloud_notify/node_modules/
+backend_cloud_notify/.env
+backend_cloud_notify/serviceAccountKey.json
+.pio/
+*.zip
+Bài thuyết trình AeroDry IoT.pdf
+Ôn tập IoT.pdf
