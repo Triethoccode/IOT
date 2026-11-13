@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650">
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="none" stroke="#167ca6"/></marker></defs>
+<rect width="1100" height="650" fill="#f6f8fb"/>
+<g font-family="Arial,sans-serif" fill="#172b41">
+<text x="35" y="42" font-size="25" font-weight="bold">AeroDry G21 — bố trí danh định W08</text>
+<text x="35" y="70" font-size="15">350 × 250 × 300 mm · Formex 5 mm · sơ đồ nguyên lý, không phải bản gia công theo tỉ lệ</text>
+<text x="45" y="115" font-size="19" font-weight="bold">Mặt bằng: sào xoay ngang</text>
+<rect x="65" y="150" width="380" height="260" rx="8" fill="#dce9f1" stroke="#44647e" stroke-width="2"/>
+<rect x="65" y="280" width="380" height="130" fill="#c8dde8" stroke="#44647e" stroke-dasharray="7 5"/>
+<text x="86" y="181" font-size="16">Nhà / mái che</text>
+<text x="280" y="383" font-size="14">Vùng thu dưới mái</text>
+<circle cx="120" cy="315" r="15" fill="#167ca6"/>
+<text x="80" y="290" font-size="15">Servo + gá</text>
+<path d="M120 315H385" stroke="#167ca6" stroke-width="8"/>
+<path d="M120 315V560" stroke="#ce7b23" stroke-width="8"/>
+<path d="M345 315A225 225 0 0 1 120 540" stroke="#167ca6" stroke-width="2" fill="none" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<text x="205" y="307" font-size="15">0°: yêu cầu thu</text>
+<text x="142" y="555" font-size="15">90°: yêu cầu phơi</text>
+<text x="244" y="476" font-size="14">Kiểm tra cả móc/vải</text><text x="244" y="496" font-size="14">trong toàn bộ cung quét</text>
+<rect x="377" y="183" width="40" height="24" fill="#88b4cf" stroke="#44647e"/>
+<text x="280" y="228" font-size="14">Quạt hướng vào đồ</text>
+<text x="64" y="439" font-size="14">Mưa: ngoài mái, có độ nghiêng</text>
+<text x="590" y="115" font-size="19" font-weight="bold">Mặt cắt: khoang và cảm biến</text>
+<path d="M610 195H1000L1040 230H590Z" fill="#709bb8" stroke="#44647e" stroke-width="2"/>
+<path d="M610 230V475H1000V230" fill="#edf3f6" stroke="#44647e" stroke-width="2"/>
+<rect x="610" y="410" width="390" height="65" fill="#c8dde8" stroke="#44647e"/>
+<text x="627" y="437" font-size="15">Khoang đế có nắp: ESP32 / relay</text>
+<text x="627" y="460" font-size="15">Nguồn / phân phối tải / chung GND</text>
+<rect x="637" y="278" width="108" height="40" fill="#cae8ce" stroke="#44647e"/>
+<text x="650" y="304" font-size="15">LCD1602</text>
+<circle cx="658" cy="346" r="9" fill="#167ca6"/><circle cx="690" cy="346" r="9" fill="#167ca6"/><circle cx="722" cy="346" r="9" fill="#167ca6"/>
+<text x="634" y="376" font-size="14">Đưa / Thu / Reset</text>
+<rect x="921" y="265" width="43" height="43" fill="#88b4cf" stroke="#44647e"/>
+<path d="M920 287H802" stroke="#167ca6" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="840" y="250" font-size="14">Quạt + LED dưới mái</text>
+<text x="650" y="170" font-size="14">LDR tránh ánh LED</text>
+<text x="790" y="337" font-size="14">DHT11 thoáng, tránh nước</text>
+<text x="790" y="359" font-size="14">và gió thổi sát</text>
+<text x="590" y="518" font-size="15">Chừa dây ngoài vùng xoay, tránh nơi đọng nước.</text>
+<text x="590" y="544" font-size="15">Chọn SG90/MG90S sau khi thử tải demo.</text>
+<text x="35" y="615" font-size="15" font-weight="bold">Trạng thái 0°/90° là yêu cầu điều khiển; servo hiện không có phản hồi vị trí.</text>
+</g></svg>

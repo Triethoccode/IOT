@@ -50,7 +50,7 @@
 
 ### 2.2. Hiệu chỉnh và chống dao động (Hysteresis)
 - **Cảm biến mưa (ADC 12-bit: 0–4095):**
-  - Hiệu chỉnh theo hai mốc `RAIN_ADC_DRY` (mặc định `3800`) và `RAIN_ADC_WET` (mặc định `1200`):
+  - Hiệu chỉnh theo hai mốc `RAIN_ADC_DRY_DEFAULT` (mặc định `4095`) và `RAIN_ADC_WET_DEFAULT` (mặc định `500`), khớp `config.h`; đây là giá trị ban đầu, phải đo trên tấm dò thực:
     $$\text{wet\_percent} = \text{clamp}\left(\frac{\text{RAIN\_ADC\_DRY} - \text{adc}}{\text{RAIN\_ADC\_DRY} - \text{RAIN\_ADC\_WET}} \times 100, 0, 100\right)$$
   - Nhãn hiển thị (`wet_label`):
     - `< 15%`: `"DRY"` (`"Khô"`)
@@ -94,7 +94,7 @@
 - **Prefix nhánh Simulation Mode (F23):** `aerodry/g21/sim/{device_id}/...` (tách biệt hoàn toàn để không điều khiển servo thật và không ghi vào lịch sử thật trên Firestore).
 - **Quy tắc Retained & QoS:**
   - **Không** dùng `retained = true` cho topic lệnh (`cmd`) để tránh tự chạy lại lệnh cơ cấu cũ khi kết nối lại (F18, F24).
-  - Mỗi lệnh từ web phải có `cmd_id` và `issued_at`; ESP32 phản hồi qua topic `ack`.
+- Mỗi lệnh từ web có `cmd_id`, `device_id`, `boot_id`, `connection_id`, `issued_at`, `ttl_sec`; ESP32 phản hồi qua topic `ack`. `boot_id` tạo mỗi boot, `connection_id` tạo mỗi lần nối MQTT, lấy từ heartbeat live. Gateway đặt TTL/timeout 5 giây, không tự retry. Firmware từ chối lệnh hết hạn, sai phiên, JSON/enum sai và lệnh khi NTP chưa sẵn sàng; cache chống thực thi trùng. Chi tiết triển khai ở `LINH_WORK_HANDOFF.md`.
 
 ### 4.1. Danh sách Topics
 
@@ -240,8 +240,11 @@
 ```json
 {
   "cmd_id": "CMD_1762940410_99",
+  "device_id": "esp32_01",
+  "boot_id": "b719ab109eb14af8",
+  "connection_id": 2941771,
   "issued_at": 1762940410,
-  "ttl_sec": 15,
+  "ttl_sec": 5,
   "action": "SET_ROD",
   "params": {
     "target": "RETRACTED",
@@ -262,6 +265,8 @@
 {
   "cmd_id": "CMD_1762940410_99",
   "device_id": "esp32_01",
+  "boot_id": "b719ab109eb14af8",
+  "connection_id": 2941771,
   "timestamp": 1762940411,
   "status": "ACCEPTED",
   "reason": "OK",

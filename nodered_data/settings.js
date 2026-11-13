@@ -20,6 +20,12 @@
  *
  **/
 
+process.env.AERODRY_MQTT_HOST ||= 'broker.hivemq.com';
+process.env.AERODRY_MQTT_PORT ||= '1883';
+const localControlPath = require('path').join(__dirname, 'control.local.json');
+const localControl = require('fs').existsSync(localControlPath)
+    ? JSON.parse(require('fs').readFileSync(localControlPath, 'utf8')) : {};
+
 module.exports = {
 
 /*******************************************************************************
@@ -542,7 +548,11 @@ module.exports = {
      *    global.get("os")
      */
     functionGlobalContext: {
-        // os:require('os'),
+        aeroDryControl: new (require('./lib/control-gateway').ControlGateway)({
+            email: process.env.AERODRY_CONTROL_EMAIL || localControl.email || '',
+            passwordHash: process.env.AERODRY_CONTROL_PASSWORD_HASH || localControl.passwordHash || '',
+        }),
+        aeroDryRoute: require('./lib/route-message').routeMessage,
     },
 
     /** The maximum number of messages nodes will buffer internally as part of their

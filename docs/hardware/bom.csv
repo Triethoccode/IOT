@@ -1,0 +1,16 @@
+ID,Hang_muc,So_luong,Don_vi,Gia_du_tru_VND,Nguon_du_toan,Kiem_tra_dau_vao,Trang_thai
+E01,ESP32-WROOM-32 Type-C,1,cai,135000,Proposal bang 5.1,Kiem tra board chip USB cong cap nguon va nap chuong trinh,Chua xac minh mua
+E02,Module DHT11,1,cai,28000,Proposal bang 5.1,Kiem tra pinout muc DATA va gia tri hop le,Chua xac minh mua
+E03,Bo cam bien mua tam do va module,1,bo,15000,Proposal bang 5.1,Kiem tra AO toi da 3.3V va ADC kho uot,Chua xac minh mua
+E04,Module LDR,1,cai,12000,Proposal bang 5.1,Kiem tra AO va chieu tang giam ADC theo anh sang,Chua xac minh mua
+E05,Servo SG90 hoac MG90S,1,cai,35000,Proposal bang 5.1,Chon theo tai demo kiem tra goc dong va ga,Chua xac minh mua
+E06,LCD1602 kem I2C,1,bo,58000,Proposal bang 5.1,Kiem tra dia chi 0x27 va muc pull-up I2C,Chua xac minh mua
+E07,Quat DC 5V 40x40 va relay 1 kenh,1,bo,28000,Proposal bang 5.1,Kiem tra muc kich relay dong quat va tiep diem,Chua xac minh mua
+E08,LED trang va dien tro,1,bo,5000,Proposal bang 5.1,Tinh dien tro theo LED thuc va dong GPIO hoac driver,Chua xac minh mua
+E09,Ba nut breadboard 840 lo day cam,1,bo,55000,Proposal bang 5.1,Kiem tra tiep xuc nut va day,Chua xac minh mua
+E10,LM2596 hop pin va hai cell 18650,1,bo,75000,Proposal bang 5.1,Chot cach ghep cell bao ve sac va dien ap dau vao buck,Chua xac minh mua
+E11,Bao ve nguon cong tac dau noi chuyen muc,1,bo,60000,Proposal uoc tinh,Kiem tra tuong thich cac module thuc,Chua xac minh mua
+M01,Formex 5 mm,1,bo,100000,Proposal bang 5.2,Kiem tra kich thuoc danh dinh 350x250x300 mm,Chua xac minh mua
+M02,Sao nhe ga servo oc vit keo,1,bo,70000,Proposal bang 5.2,Kiem tra do cung cung quet va tai demo,Chua xac minh mua
+M03,Vai va moc nho,1,bo,20000,Proposal bang 5.2,Kiem tra khoi luong va khoang ho khi xoay,Chua xac minh mua
+R01,Du phong van chuyen dich vu thay linh kien,1,khoan,104000,Proposal bang 5.2,Cap nhat theo hoa don thuc,Chua su dung

@@ -3,6 +3,11 @@ backend_cloud_notify/node_modules/
 backend_cloud_notify/.env
 backend_cloud_notify/serviceAccountKey.json
 .pio/
+tmp/
+esp32_aerodry/config_local.h
+nodered_data/.config*.json*
+nodered_data/.sessions.json
+nodered_data/control.local.json
 *.zip
 Bài thuyết trình AeroDry IoT.pdf
 Ôn tập IoT.pdf

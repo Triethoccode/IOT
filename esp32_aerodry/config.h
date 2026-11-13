@@ -93,22 +93,32 @@
 // ============================================================================
 // 5. CẤU HÌNH MQTT TOPICS (Khớp với Node-RED Dashboard của Triết & W01)
 // ============================================================================
+#if __has_include("config_local.h")
+#include "config_local.h"
+#endif
+#ifndef MQTT_BROKER_DEFAULT
 #define MQTT_BROKER_DEFAULT         "broker.hivemq.com"
+#endif
+#ifndef MQTT_PORT_DEFAULT
 #define MQTT_PORT_DEFAULT           1883
+#endif
+#ifndef MQTT_USER_DEFAULT
 #define MQTT_USER_DEFAULT           ""
+#endif
+#ifndef MQTT_PASS_DEFAULT
 #define MQTT_PASS_DEFAULT           ""
+#endif
 
 // Topics chính tương thích trực tiếp với flows.json trên Node-RED của nhóm:
-#define TOPIC_TELEMETRY             "smartdry/sensor/telemetry"
-#define TOPIC_SESSION               "smartdry/sensor/session"
-#define TOPIC_HEARTBEAT             "smartdry/sensor/heartbeat"
-#define TOPIC_ALERT                 "smartdry/alert/emergency"
-#define TOPIC_CTRL_RACK             "smartdry/control/rack"
-#define TOPIC_CTRL_DRY              "smartdry/control/dryer"
-#define TOPIC_CTRL_ACK              "smartdry/control/ack"
-
-#define TOPIC_PREFIX_REAL           "smartdry"
-#define TOPIC_PREFIX_SIM            "smartdry/sim"
+#define TOPIC_PREFIX_REAL           "aerodry/g21/" DEVICE_ID
+#define TOPIC_PREFIX_SIM            "aerodry/g21/sim/" DEVICE_ID
+#define TOPIC_TELEMETRY             TOPIC_PREFIX_REAL "/telemetry"
+#define TOPIC_STATE                 TOPIC_PREFIX_REAL "/state"
+#define TOPIC_SESSION               TOPIC_PREFIX_REAL "/session"
+#define TOPIC_HEARTBEAT             TOPIC_PREFIX_REAL "/heartbeat"
+#define TOPIC_ALERT                 TOPIC_PREFIX_REAL "/event"
+#define TOPIC_COMMAND               TOPIC_PREFIX_REAL "/cmd"
+#define TOPIC_CTRL_ACK              TOPIC_PREFIX_REAL "/ack"
 
 #define CMD_MAX_TTL_SEC             30UL  // Bỏ qua lệnh cũ quá 30s (khi đồng bộ NTP)
 #define OFFLINE_QUEUE_CAPACITY      16    // Số bản tin phiên phơi/sự kiện lưu tạm trong RAM khi mất mạng

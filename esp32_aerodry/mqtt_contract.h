@@ -77,7 +77,7 @@ public:
     return true;
   }
 
-  // [W01] Đóng gói JSON Telemetry định kỳ mỗi 2.5s (topic: smartdry/sensor/telemetry)
+  // [W01] Telemetry mỗi 2.5s: TOPIC_TELEMETRY (aerodry/g21/{device}/telemetry).
   // Bao gồm đầy đủ trường phẳng cho UI của Triết và cấu trúc chuẩn cho Firestore W18
   void buildTelemetryJson(uint32_t now_ms,
                           uint32_t now_epoch,
@@ -221,7 +221,7 @@ public:
     );
   }
 
-  // [W01, W04] Đóng gói JSON Phiên phơi & Mẻ đồ (topic: smartdry/sensor/session)
+  // [W01, W04] Phiên phơi & mẻ đồ: TOPIC_SESSION.
   void buildSessionJson(const SessionRecord& rec, char* out_json, size_t max_len) const {
     char temp_str[16], hum_str[16], hms_str[16];
     formatFloatOrNull(rec.sensors.temperature_c, rec.sensors.dht_valid, temp_str, sizeof(temp_str));
@@ -280,7 +280,7 @@ public:
     );
   }
 
-  // [W01, W05, W21] Đóng gói JSON Sự kiện & Cảnh báo (topic: smartdry/alert/emergency)
+  // [W01, W05, W21] Sự kiện & cảnh báo: TOPIC_ALERT (.../event).
   void buildAlertEventJson(const AlertEventRecord& rec, char* out_json, size_t max_len) const {
     char temp_str[16], hum_str[16], hms_str[16];
     formatFloatOrNull(rec.sensors.temperature_c, rec.sensors.dht_valid, temp_str, sizeof(temp_str));
@@ -406,7 +406,7 @@ public:
     );
   }
 
-  // Đóng gói JSON Phản hồi lệnh điều khiển (topic: smartdry/control/ack)
+  // JSON phản hồi lệnh điều khiển: TOPIC_CTRL_ACK (.../ack).
   void buildAckJson(const char* cmd_id,
                     uint32_t now_ms,
                     uint32_t now_epoch,

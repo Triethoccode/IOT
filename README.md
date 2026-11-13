@@ -2,8 +2,10 @@
 
 **Nhóm 21 – Lớp 24C11 | Học phần: Vật lý cho Công nghệ Thông tin (PHY00007)**  
 - **Tạ Bỉnh Phong (24127100 – Nhóm trưởng):** Cảm biến, thuật toán tự động hóa, bộ đếm thời gian phơi trên ESP32 (**W01–W06**), Lưu trữ Cloud Firestore (**W18**), Truy vấn lịch sử 24 giờ (**W19 - phần dữ liệu**), Thông báo đẩy PushSafer & Email SMTP chống gửi trùng (**W21**).
-- **Trịnh Khánh Linh (24127437):** Cơ cấu cơ khí, mạch nguồn, điều khiển Servo & 3 nút nhấn (**W12**), LCD1602 I2C, Relay quạt & Đèn LED (**W13**), WiFiManager portal & MQTT (**W14**).
-- **Trần Minh Triết (24127573):** Giao diện Web Dashboard (Stitch UI / Node-RED Dashboard) (**W16**), Backend điều khiển (**W17**), Vẽ biểu đồ 24 giờ & hiển thị nhật ký (**W19 - phần UI**), Đăng nhập/Đăng xuất (**W20**), Chế độ mô phỏng (**W22**).
+- **Trịnh Khánh Linh (24127437):** Bản vẽ, linh kiện, cơ cấu và nguồn (**W08–W11**), Servo & 3 nút (**W12**), LCD/relay quạt/LED (**W13**), Wi-Fi portal & MQTT (**W14**), kiểm thử cơ cấu/nguồn (**W15**); phần **W17** gửi lệnh, ghép ACK/timeout và heartbeat Online/Offline trên Node-RED. Phân công đã được nhóm xác nhận.
+- **Trần Minh Triết (24127573):** Giao diện Web Dashboard (**W16**), phần web/xác thực và hiển thị phản hồi của **W17**, biểu đồ & nhật ký (**W19 - phần UI**), Đăng nhập/Đăng xuất (**W20**), mô phỏng (**W22**), phối hợp kiểm thử và demo.
+
+Hướng dẫn phần Linh: [bàn giao và cách chạy](docs/LINH_WORK_HANDOFF.md), [thiết kế/bảng chân](docs/hardware/DESIGN.md), [checklist thử phần cứng](docs/hardware/ACCEPTANCE.md). Có code hoặc test mô phỏng không đồng nghĩa phần cứng đã nghiệm thu.
 
 ---
 
@@ -49,19 +51,23 @@ d:\projects\IOT\
 
 ## 2. Hướng Dẫn Chạy Và Kiểm Thử Nhanh
 
-### A. Chạy Kiểm Thử Tự Động W06 (Đối chiếu toàn bộ kịch bản Bảng 5.5)
+### A. Chạy kiểm thử phần mềm
 ```powershell
-node tests/run_w06_verification.js
+npm test
 ```
 
 ### B. Chạy Giao Diện Web Dashboard & Node-RED Backend (Tích hợp UI của Triết + Logic của Phong)
 ```powershell
 npm install
+npm run configure:control
 npm start
 ```
 - **Giao diện người dùng (Web Dashboard):** `http://localhost:1880/ui`
 - **Giao diện chỉnh sửa luồng Node-RED:** `http://localhost:1880`
+- Không có tài khoản mặc định; dùng tài khoản vừa cấu hình. Điều khiển khóa đến khi nhận heartbeat live. Adapter đăng nhập cục bộ dùng cho tích hợp W17; W20 Firebase của Triết vẫn cần triển khai riêng.
+- MQTT thật dùng `aerodry/g21/esp32_01/...`; xem W01 và tài liệu bàn giao để cấu hình cùng broker cho ESP32, Node-RED và worker cloud.
+- Build flow sau khi sửa `nodered_data/ui/control.js`: `npm run build:flows`.
 
 ### C. Nạp Code Lên Mạch ESP32 (`esp32_aerodry/`)
-1. **Cách 1 (Arduino IDE):** Mở file `esp32_aerodry/esp32_aerodry.ino` bằng Arduino IDE, cài các thư viện `DHT sensor library`, `PubSubClient`, `ESP32Servo`, `LiquidCrystal_I2C`, `WiFiManager`, chọn board `ESP32 Dev Module` và nhấn **Upload**.
+1. **Cách 1 (Arduino IDE):** Dùng ESP32 Arduino core 2.0.17, mở `esp32_aerodry/esp32_aerodry.ino`; cài DHT, PubSubClient 2.8, ESP32Servo **0.13.0**, LiquidCrystal_I2C, WiFiManager 2.0.17 và ArduinoJson 7.4.x. Chọn `ESP32 Dev Module`; chỉ upload khi đã sẵn sàng chạy cơ cấu.
 2. **Cách 2 (PlatformIO trên VS Code):** Mở thư mục `esp32_aerodry/`, PlatformIO sẽ tự động tải đúng phiên bản thư viện trong `platformio.ini` và biên dịch.
