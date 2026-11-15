@@ -20,11 +20,16 @@ class NotificationService {
     // Cho phép tiêm (inject) hàm gửi giả lập trong kiểm thử W06
     this.customPushSender = customTransports.pushSender || null;
     this.customEmailSender = customTransports.emailSender || null;
+    this.firestoreService = customTransports.firestoreService || null;
 
     // Bộ nhớ chống gửi trùng (Deduplication theo event_id & Cooldown theo loại sự kiện)
     this.processedEventIds = new Set();
     this.lastSentByEventKey = new Map();
     this.errorLogs = [];
+  }
+
+  setFirestoreService(firestoreService) {
+    this.firestoreService = firestoreService;
   }
 
   /**
@@ -87,9 +92,22 @@ class NotificationService {
     this.processedEventIds.add(eventId);
     this.lastSentByEventKey.set(cooldownKey, nowMs);
 
+    // Truy vấn danh sách email người dùng đăng ký thiết bị này từ Firestore
+    let targetEmails = [];
+    if (this.firestoreService && typeof this.firestoreService.getUserEmailsByDeviceId === 'function') {
+      try {
+        targetEmails = await this.firestoreService.getUserEmailsByDeviceId(deviceId);
+      } catch (_) {}
+    }
+    if (!targetEmails || targetEmails.length === 0) {
+      if (this.config.smtp.recipientEmail) {
+        targetEmails = [this.config.smtp.recipientEmail];
+      }
+    }
+
     // 3. Chuẩn bị nội dung thông báo chuẩn theo Mục 3.8:
     // Gồm: Mã nhóm, Thiết bị, Nguyên nhân, Thời điểm và Tổng thời gian đã phơi
-    const content = this.buildNotificationContent(eventPayload, nowMs);
+    const content = this.buildNotificationContent(eventPayload, nowMs, targetEmails);
 
     const needPush =
       eventCode === 'AUTO_RAIN_RETRACT' || eventCode === 'MANUAL_RAIN_WARNING';
@@ -113,7 +131,7 @@ class NotificationService {
   /**
    * Tạo nội dung thông báo đẩy PushSafer và Email cảnh báo theo đúng yêu cầu Mục 3.8
    */
-  buildNotificationContent(eventPayload, nowMs = Date.now()) {
+  buildNotificationContent(eventPayload, nowMs = Date.now(), targetEmails = []) {
     const groupId = eventPayload.group_id || this.config.groupId;
     const deviceId = eventPayload.device_id || this.config.deviceId;
     const eventCode = eventPayload.event_code;
@@ -129,22 +147,22 @@ class NotificationService {
     });
 
     let reasonText = 'Thu sào tự động do phát hiện mưa';
-    let subject = `[AeroDry IoT - ${groupId}] Cảnh báo thu sào tự động do mưa`;
+    let subject = `[AeroDry IoT - ${groupId}] [Thiết bị: ${deviceId}] Cảnh báo thu sào tự động do mưa`;
     let actionAdvice = 'Sào phơi đã được tự động đưa vào dưới mái hiên an toàn.';
 
     if (eventCode === 'MANUAL_RAIN_WARNING') {
       reasonText = 'Phát hiện mưa trong lúc sào đang mở ở chế độ Thủ công (Manual)';
-      subject = `[AeroDry IoT - ${groupId}] CẢNH BÁO: Đang mưa nhưng sào ở chế độ Manual!`;
+      subject = `[AeroDry IoT - ${groupId}] [Thiết bị: ${deviceId}] CẢNH BÁO: Đang mưa nhưng sào ở chế độ Manual!`;
       actionAdvice =
         'Vui lòng mở Dashboard AeroDry để thu sào hoặc chuyển lại chế độ Tự động (Auto) ngay.';
     } else if (eventCode === 'HIGH_HUMIDITY_PROLONGED') {
       reasonText = `Độ ẩm môi trường duy trì ở mức cao (${sensors.humidity_pct ?? '--'}%) kéo dài`;
-      subject = `[AeroDry IoT - ${groupId}] Nhắc nhở: Độ ẩm cao kéo dài - Cân nhắc bật quạt`;
+      subject = `[AeroDry IoT - ${groupId}] [Thiết bị: ${deviceId}] Nhắc nhở: Độ ẩm cao kéo dài - Cân nhắc bật quạt`;
       actionAdvice =
         'Người dùng vui lòng kiểm tra đồ phơi dưới mái hiên và cân nhắc bật quạt hỗ trợ làm khô trên Website.';
     }
 
-    const pushTitle = `AeroDry (${groupId}): ${eventPayload.title_vi || reasonText}`;
+    const pushTitle = `AeroDry (${groupId}) [${deviceId}]: ${eventPayload.title_vi || reasonText}`;
     const pushMessage = [
       `Nhóm: ${groupId} | Thiết bị: ${deviceId}`,
       `Nguyên nhân: ${reasonText}`,
@@ -154,10 +172,16 @@ class NotificationService {
       actionAdvice,
     ].join('\n');
 
+    const targetEmailStr =
+      targetEmails && targetEmails.length > 0
+        ? targetEmails.join(', ')
+        : (this.config.smtp.recipientEmail || 'Mặc định');
+
     const emailBodyText = [
       '=== THÔNG BÁO TỪ HỆ THỐNG GIÀN PHƠI THÔNG MINH AERODRY IoT ===',
       `• Mã nhóm: ${groupId} (Nhóm 21 - Lớp 24C11)`,
-      `• Mã thiết bị: ${deviceId}`,
+      `• Mã thiết bị (Device ID): ${deviceId}`,
+      `• Người dùng sở hữu thiết bị: ${targetEmailStr}`,
       `• Mã sự kiện: ${eventCode} (${eventPayload.event_id || 'N/A'})`,
       `• Nguyên nhân: ${reasonText}`,
       `• Thời điểm ghi nhận: ${timeStrVi}`,
@@ -173,6 +197,7 @@ class NotificationService {
       pushTitle,
       pushMessage,
       emailBodyText,
+      targetEmails,
       metadata: {
         groupId,
         deviceId,
@@ -298,7 +323,12 @@ class NotificationService {
       return this.customEmailSender(content);
     }
 
-    if (!this.config.smtp.user || !this.config.smtp.pass || !this.config.smtp.recipientEmail) {
+    const recipientList =
+      content.targetEmails && content.targetEmails.length > 0
+        ? content.targetEmails.join(', ')
+        : this.config.smtp.recipientEmail;
+
+    if (!this.config.smtp.user || !this.config.smtp.pass || !recipientList) {
       throw new Error('SMTP_CREDENTIALS_OR_RECIPIENT_NOT_CONFIGURED');
     }
 
@@ -315,12 +345,12 @@ class NotificationService {
 
     const info = await transporter.sendMail({
       from: `"AeroDry IoT - Nhóm 21" <${this.config.smtp.user}>`,
-      to: this.config.smtp.recipientEmail,
+      to: recipientList,
       subject: content.subject,
       text: content.emailBodyText,
     });
 
-    return { messageId: info.messageId };
+    return { messageId: info.messageId, recipients: recipientList };
   }
 }
 

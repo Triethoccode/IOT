@@ -24,6 +24,7 @@ module.exports = {
     // Mục 3.7: Mẫu cảm biến lưu định kỳ dự kiến mỗi 60 giây (60000 ms), độc lập với chu kỳ 2.5s của web
     sampleSaveIntervalMs: Number(process.env.SENSOR_SAMPLE_SAVE_INTERVAL_MS || 60000),
     collections: {
+      users: 'users',
       devices: 'devices',
       sensorSamples: 'sensor_samples',
       batches: 'batches',

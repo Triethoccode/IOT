@@ -18,6 +18,7 @@ class FirestoreService {
 
     // Bộ nhớ dự phòng cục bộ (dùng khi kiểm thử W06 hoặc khi chưa nạp file serviceAccountKey.json)
     this.memoryStore = {
+      users: new Map(),
       devices: new Map(),
       sensor_samples: [],
       batches: new Map(),
@@ -349,7 +350,56 @@ class FirestoreService {
       } else {
         this.memoryStore.events.push(data);
       }
+    } else if (collectionName === (this.config.firestore.collections.users || 'users')) {
+      const prev = this.memoryStore.users.get(docId) || {};
+      this.memoryStore.users.set(docId, merge ? { ...prev, ...data } : data);
     }
+  }
+
+  /**
+   * Truy vấn danh sách email của người dùng sở hữu device_id cụ thể từ Firestore
+   * Dùng để gửi email cảnh báo đúng người dùng sở hữu thiết bị đó.
+   */
+  async getUserEmailsByDeviceId(deviceId) {
+    if (!deviceId) return [];
+    this.initFirebase();
+    if (this.db) {
+      try {
+        const usersCol = this.config.firestore.collections.users || 'users';
+        const snap = await this.db.collection(usersCol).where('device_id', '==', deviceId).get();
+        const emails = [];
+        snap.forEach((doc) => {
+          const u = doc.data();
+          if (u && u.email && typeof u.email === 'string') {
+            emails.push(u.email.trim());
+          }
+        });
+        if (emails.length > 0) return [...new Set(emails)];
+      } catch (err) {
+        // Fallback sang memoryStore nếu lỗi truy vấn Firestore
+      }
+    }
+
+    const memoryEmails = [];
+    for (const [_, u] of this.memoryStore.users.entries()) {
+      if (u && u.device_id === deviceId && u.email) {
+        memoryEmails.push(u.email.trim());
+      }
+    }
+    return [...new Set(memoryEmails)];
+  }
+
+  /**
+   * Lưu hoặc cập nhật thông tin người dùng kèm device_id vào collection `users`
+   */
+  async setUserProfile(userId, userData) {
+    if (!userId || !userData) return;
+    const usersCol = this.config.firestore.collections.users || 'users';
+    await this._saveDoc(usersCol, userId, {
+      user_id: userId,
+      ...userData,
+      updated_at_ms: Date.now(),
+    });
   }
 }
 

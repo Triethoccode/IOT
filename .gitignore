@@ -9,5 +9,9 @@ nodered_data/.config*.json*
 nodered_data/.sessions.json
 nodered_data/control.local.json
 *.zip
-Bài thuyết trình AeroDry IoT.pdf
-Ôn tập IoT.pdf
+*.pdf
+*.exe
+nodered_data/firebase_key.json
+nodered_data/*.backup
+nodered_data/.flows.json.backup
+cloudflared.exe

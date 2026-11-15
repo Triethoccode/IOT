@@ -22,7 +22,13 @@ function createAeroDryBackend(customConfig = {}, customDeps = {}) {
     customDeps.historyQueryService || new HistoryQueryService(firestoreService, customConfig);
   const notificationService =
     customDeps.notificationService ||
-    new NotificationService(customConfig, customDeps.transports || {});
+    new NotificationService(customConfig, {
+      ...(customDeps.transports || {}),
+      firestoreService: customDeps.transports?.firestoreService || firestoreService,
+    });
+  if (typeof notificationService.setFirestoreService === 'function' && !notificationService.firestoreService) {
+    notificationService.setFirestoreService(firestoreService);
+  }
   const mqttWorker = new AeroDryMqttWorker({
     firestoreService,
     notificationService,

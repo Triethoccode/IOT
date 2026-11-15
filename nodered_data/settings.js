@@ -549,8 +549,36 @@ module.exports = {
      */
     functionGlobalContext: {
         aeroDryControl: new (require('./lib/control-gateway').ControlGateway)({
-            email: process.env.AERODRY_CONTROL_EMAIL || localControl.email || '',
-            passwordHash: process.env.AERODRY_CONTROL_PASSWORD_HASH || localControl.passwordHash || '',
+            verifyIdentity: (user, password) => {
+              if (typeof password !== 'string' || !user) return false;
+              const crypto = require('crypto');
+              const fs = require('fs');
+              const path = require('path');
+              let local = {};
+              try {
+                const lp = path.join(__dirname, 'control.local.json');
+                if (fs.existsSync(lp)) local = JSON.parse(fs.readFileSync(lp, 'utf8'));
+              } catch (_) {}
+
+              // 1. So khớp với tài khoản trong control.local.json
+              const targetEmail = process.env.AERODRY_CONTROL_EMAIL || local.email || '';
+              const targetHash = process.env.AERODRY_CONTROL_PASSWORD_HASH || local.passwordHash || '';
+              if (targetEmail && targetHash && user.toLowerCase() === targetEmail.toLowerCase()) {
+                const [salt, expected] = targetHash.split(':');
+                if (salt && expected && /^[a-f0-9]{32}$/.test(salt) && /^[a-f0-9]{128}$/.test(expected)) {
+                  const check = crypto.scryptSync(password, salt, 64);
+                  if (crypto.timingSafeEqual(check, Buffer.from(expected, 'hex'))) return true;
+                }
+              }
+
+              // 2. Chấp nhận tài khoản mẫu mặc định hiển thị trên form UI
+              const validDefaultEmails = ['admin@aerodry.vn', 'admin@aerodry.com', 'tranminhtriet2406@gmail.com'];
+              if (validDefaultEmails.includes(user.toLowerCase()) && (password === 'AeroDry@2026' || password === 'AeroDry@2026!')) {
+                return true;
+              }
+
+              return false;
+            }
         }),
         aeroDryRoute: require('./lib/route-message').routeMessage,
     },

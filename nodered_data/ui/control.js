@@ -49,10 +49,22 @@
   window.adToggleSimMode = () => send('simulation_mode', !state.simulation);
   window.adSimulateWeather = type => {
     if (!state.simulation) return;
-    const values = { SUNNY: [33.5,58,0,'NANG_RAO'], SHOWER: [29.5,76,38,'MUA_BONG_MAY'], HEAVY_RAIN: [26,90,82,'MUA_RAO_LON'] }[type];
+    const values = {
+      SUNNY: [33.5, 58, 0, 'NANG_RAO'],
+      HUMIDITY: [28.0, 88, 0, 'DO_AM_CAO'],
+      SHOWER: [28.0, 88, 0, 'DO_AM_CAO'],
+      HEAVY_RAIN: [26.0, 90, 82, 'MUA_RAO_LON']
+    }[type];
     if (!values) return;
-    send('aerodry/g21/sim/esp32_01/telemetry', { temp: values[0], hum: values[1], rain_pct: values[2], weather_type: values[3],
-      rack_state: state.rack_state, drying_sec: state.drying_seconds, mode: state.control_mode });
+    send('aerodry/g21/sim/esp32_01/telemetry', {
+      temp: values[0],
+      hum: values[1],
+      rain_pct: values[2],
+      weather_type: values[3],
+      rack_state: state.rack_state ?? 1,
+      drying_sec: state.drying_seconds || 4200,
+      mode: state.control_mode
+    });
   };
   // History/export belongs to W19 UI; never export the old hard-coded sample CSV.
   window.adExportCSV = () => window.adShowToast('Xuất lịch sử cần nối dữ liệu W19 từ backend');
