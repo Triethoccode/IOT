@@ -493,9 +493,9 @@
             <span class="material-symbols-outlined" style="color: #f59e0b; font-size: 20px;">wb_sunny</span>
             <span>Nắng ráo</span>
           </button>
-          <button type="button" class="sim-btn" onclick="simulateWeather('SHOWER')">
-            <span class="material-symbols-outlined" style="color: #0ea5e9; font-size: 20px;">rainy</span>
-            <span>Mưa nhỏ</span>
+          <button type="button" class="sim-btn" onclick="simulateWeather('HUMIDITY')">
+            <span class="material-symbols-outlined" style="color: #0ea5e9; font-size: 20px;">water_drop</span>
+            <span>Ẩm kéo dài</span>
           </button>
           <button type="button" class="sim-btn" onclick="simulateWeather('HEAVY_RAIN')">
             <span class="material-symbols-outlined" style="color: #ef4444; font-size: 20px;">thunderstorm</span>
@@ -954,7 +954,7 @@
         }
       } else if (type === 'SHOWER') {
         Object.assign(state, { temp: 29.5, hum: 76, rain: 38, rssi: -61, weather: 'SHOWER' });
-        wb.textContent = '🌦️ Mưa nhỏ';
+        wb.textContent = '💧 Ẩm kéo dài';
         wb.className = 'badge badge-info';
         banner.style.display = 'block';
 

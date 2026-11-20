@@ -581,6 +581,7 @@ module.exports = {
             }
         }),
         aeroDryRoute: require('./lib/route-message').routeMessage,
+        aeroDryBackend: require('../backend_cloud_notify/src/index').createAeroDryBackend(),
     },
 
     /** The maximum number of messages nodes will buffer internally as part of their

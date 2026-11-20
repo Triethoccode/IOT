@@ -15,3 +15,4 @@ nodered_data/firebase_key.json
 nodered_data/*.backup
 nodered_data/.flows.json.backup
 cloudflared.exe
+nodered_data/flows_cred.json
