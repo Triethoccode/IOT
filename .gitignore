@@ -1,6 +1,11 @@
 node_modules/
 backend_cloud_notify/node_modules/
+.env
+.env.local
+.env.*.local
+!.env.example
 backend_cloud_notify/.env
+backend_cloud_notify/.env.local
 backend_cloud_notify/serviceAccountKey.json
 .pio/
 tmp/

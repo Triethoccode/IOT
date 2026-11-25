@@ -34,9 +34,18 @@ class FirestoreService {
     if (this.db) return true;
     try {
       const admin = require('firebase-admin');
-      const keyPath = path.resolve(this.config.firestore.serviceAccountPath);
-      if (fs.existsSync(keyPath)) {
-        const serviceAccount = JSON.parse(fs.readFileSync(keyPath, 'utf8'));
+      const candidatePaths = [
+        this.config.firestore.serviceAccountPath,
+        this.config.firestore.serviceAccountPath ? path.resolve(this.config.firestore.serviceAccountPath) : null,
+        path.resolve(__dirname, '../serviceAccountKey.json'),
+        path.resolve(__dirname, '../../serviceAccountKey.json'),
+        path.resolve(__dirname, '../../nodered_data/firebase_key.json'),
+        path.resolve('serviceAccountKey.json'),
+        path.resolve('backend_cloud_notify/serviceAccountKey.json'),
+      ];
+      const resolvedKeyPath = candidatePaths.find(p => p && fs.existsSync(p));
+      if (resolvedKeyPath) {
+        const serviceAccount = JSON.parse(fs.readFileSync(resolvedKeyPath, 'utf8'));
         if (!admin.apps.length) {
           admin.initializeApp({
             credential: admin.credential.cert(serviceAccount),

@@ -63,8 +63,10 @@ class NotificationService {
       };
     }
 
-    const eventId = eventPayload.event_id || `EVT_${nowMs}`;
     const deviceId = eventPayload.device_id || this.config.deviceId;
+    const eventId =
+      eventPayload.event_id ||
+      `EVT_${deviceId}_${nowMs}_${Math.random().toString(36).slice(2, 7)}`;
     const cooldownKey = `${deviceId}:${eventCode}`;
 
     // 1. Chống gửi trùng cùng một mã sự kiện (event_id)
@@ -75,6 +77,8 @@ class NotificationService {
         event_id: eventId,
       };
     }
+    // Đánh dấu mã sự kiện đã nhận ngay lập tức để chặn trùng lặp đồng thời
+    this.processedEventIds.add(eventId);
 
     // 2. Chống gửi lặp theo khoảng thời gian chờ (Cooldown - Mục 3.8)
     const lastSentMs = this.lastSentByEventKey.get(cooldownKey) || 0;
@@ -88,8 +92,7 @@ class NotificationService {
       };
     }
 
-    // Đánh dấu thời điểm gửi để khóa trùng lặp ngay lập tức
-    this.processedEventIds.add(eventId);
+    // Đánh dấu thời điểm gửi thành công để khóa Cooldown
     this.lastSentByEventKey.set(cooldownKey, nowMs);
 
     // Truy vấn danh sách email người dùng đăng ký thiết bị này từ Firestore

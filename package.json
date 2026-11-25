@@ -4,13 +4,17 @@
   "description": "AeroDry IoT (SmartBreeze Pro) - Nhóm 21 - 24C11 - Full Project (ESP32, Node-RED, Firestore, PushSafer/SMTP, W06 Tests)",
   "scripts": {
     "start": "node-red --userDir ./nodered_data flows.json",
-    "test": "node tests/run_w06_verification.js && node --test tests/control_gateway.test.js tests/dashboard_control.test.js tests/node_red_integration.test.js",
+    "test": "node tests/run_w06_verification.js && node --test tests/control_gateway.test.js tests/dashboard_control.test.js tests/node_red_integration.test.js tests/cloud_flow_verification.test.js",
     "build:flows": "node scripts/build-control-flow.js",
     "configure:control": "powershell -NoProfile -File scripts/configure-control.ps1",
     "cloud-worker": "node backend_cloud_notify/src/index.js"
   },
   "dependencies": {
+    "dotenv": "^18.0.10",
+    "firebase-admin": "^14.5.1",
+    "mqtt": "^5.16.1",
     "node-red": "^4.0.0",
-    "node-red-dashboard": "^3.6.5"
+    "node-red-dashboard": "^3.6.5",
+    "nodemailer": "^10.6.1"
   }
 }

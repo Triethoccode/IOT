@@ -20,6 +20,29 @@
  *
  **/
 
+// Nạp tự động file .env từ thư mục gốc dự án (nếu tồn tại)
+const _fs = require('fs');
+const _path = require('path');
+const _rootEnvPath = _path.resolve(__dirname, '../.env');
+if (_fs.existsSync(_rootEnvPath)) {
+    const _envLines = _fs.readFileSync(_rootEnvPath, 'utf8').split(/\r?\n/);
+    for (const _line of _envLines) {
+        const _trimmed = _line.trim();
+        if (!_trimmed || _trimmed.startsWith('#')) continue;
+        const _eqIdx = _trimmed.indexOf('=');
+        if (_eqIdx > 0) {
+            const _key = _trimmed.slice(0, _eqIdx).trim();
+            let _val = _trimmed.slice(_eqIdx + 1).trim();
+            if ((_val.startsWith('"') && _val.endsWith('"')) || (_val.startsWith("'") && _val.endsWith("'"))) {
+                _val = _val.slice(1, -1);
+            }
+            if (process.env[_key] === undefined) {
+                process.env[_key] = _val;
+            }
+        }
+    }
+}
+
 process.env.AERODRY_MQTT_HOST ||= 'broker.hivemq.com';
 process.env.AERODRY_MQTT_PORT ||= '1883';
 const localControlPath = require('path').join(__dirname, 'control.local.json');
